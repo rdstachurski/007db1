@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { Form } from "../../types/form";
 import PrefillOptions from "./preFillOptionList";
+import { GlobalProperties } from "../../types/prefillOptions/dataSource";
 
 interface FormModalProps {
 	onCloseModal: () => void;
 	selectedForm: Form;
+	globalProps: GlobalProperties[];
+	prereqNodeData: Record<string, unknown>[] | undefined;
 }
 
 export default function FormModal({
 	onCloseModal,
 	selectedForm,
+	globalProps,
+	prereqNodeData,
 }: FormModalProps) {
 	const [showPrefillOptions, setShowPrefillOptions] = useState(false);
 
@@ -23,7 +28,13 @@ export default function FormModal({
 	return (
 		<div className="backdrop-blur-sm fixed inset-0 z-50 flex justify-center items-center">
 			<div className="grid bg-white w-[700px] h-[600px] shadow-lg rounded-md relative px-6 py-8 overflow-auto border-1">
-				{showPrefillOptions && <PrefillOptions onCancel={handleOnCancel} />}
+				{showPrefillOptions && (
+					<PrefillOptions
+						onCancel={handleOnCancel}
+						globalProps={globalProps}
+						prereqNodeData={prereqNodeData}
+					/>
+				)}
 				<div className="flex justify-center">
 					<ul>
 						{Object.keys(selectedForm.field_schema.properties).map((key) => (

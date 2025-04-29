@@ -31,10 +31,3 @@ export const createPrerequisites = (nodes: AppNode[]) => {
 
 	return prerequisiteMap;
 };
-
-// {   node.id: [node.id,node,id]
-//     Form A: [],
-//     Form B: [A]
-//     Form D:[B, A]
-//     Form F: [D, E, B, C, A]
-// }

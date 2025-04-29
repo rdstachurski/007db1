@@ -4,7 +4,6 @@ import {
 	Connection,
 	Controls,
 	Edge,
-	Node,
 	ReactFlow,
 	useEdgesState,
 	useNodesState,
@@ -15,9 +14,12 @@ import { BluePrintDesc } from "../../types/graph";
 import { nodeTypes } from "../nodes";
 import { useEffect, useState } from "react";
 import FormModal from "../modal/formModal";
+import actionProp from "../../dummydata/actionProperties.json";
+import clientOrgProp from "../../dummydata/clientOrgProperties.json";
 import { Form } from "../../types/form";
 import { AppNode } from "../nodes/types";
 import { createPrerequisites } from "../../utils/createPrerequisiteLists";
+import { GlobalProperties } from "../../types/prefillOptions/dataSource";
 
 export default function WorkCanvas() {
 	const [nodes, setNodes] = useNodesState<AppNode>([]);
@@ -26,6 +28,7 @@ export default function WorkCanvas() {
 	const [prerequisites, setPrerequisites] = useState<
 		Map<string, string[]> | undefined
 	>(undefined);
+	const [globalProps, setGlobalProps] = useState<GlobalProperties[]>([]);
 	const createEdges = (apiEdges: Connection[]) => {
 		let processedEdges: Edge[] = [];
 
@@ -43,6 +46,16 @@ export default function WorkCanvas() {
 		setForms(castedData.forms);
 		const prereqs = createPrerequisites(castedData.nodes);
 		setPrerequisites(prereqs);
+
+		const global: GlobalProperties[] = [
+			{ name: "Action Properties", properties: actionProp },
+			{
+				name: "Client Organization Properties",
+				properties: clientOrgProp,
+			},
+		];
+		setGlobalProps(global);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	const [showModal, setShowModal] = useState(false);
@@ -50,20 +63,30 @@ export default function WorkCanvas() {
 		undefined
 	);
 	const [selectedForm, setSelectedForm] = useState<Form | undefined>(undefined);
-	const handleOnNodeClick = (e: React.MouseEvent, node: AppNode) => {
+	const [prereqNodeData, setPrereqNodeData] = useState<
+		Record<string, unknown>[] | undefined
+	>();
+	const handleOnNodeClick = (_e: React.MouseEvent, node: AppNode) => {
 		setShowModal(true);
 		if (node.type === "form") {
 			setSelectedNode(node);
 			const form = forms.find((form) => form.id === node.data.component_id);
 			setSelectedForm(form);
+			const prerequisiteId = prerequisites?.get(node.id);
+			const filteredNodesData = nodes
+				.filter((node) => prerequisiteId?.includes(node.id))
+				.map((node) => node.data);
+			setPrereqNodeData(filteredNodesData);
 		}
 	};
 	return (
 		<div className=" w-screen h-screen border border-black">
-			{showModal && selectedForm && (
+			{showModal && selectedForm && selectedNode && (
 				<FormModal
 					onCloseModal={() => setShowModal(false)}
 					selectedForm={selectedForm}
+					globalProps={globalProps}
+					prereqNodeData={prereqNodeData}
 				/>
 			)}
 			<ReactFlow
