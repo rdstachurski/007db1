@@ -1,5 +1,9 @@
-import "./App.css";
+import WorkCanvas from "./components/workcanvas/WorkCanvas";
 
 export default function App() {
-	return <></>;
+	return (
+		<>
+			<WorkCanvas />
+		</>
+	);
 }

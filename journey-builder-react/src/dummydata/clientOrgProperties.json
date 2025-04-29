@@ -1,0 +1,8 @@
+{
+	"organizationName": "Acme Corporation",
+	"organizationId": "org_12345",
+	"contactEmail": "contact@acme.com",
+	"region": "North America",
+	"industry": "Technology",
+	"numberOfEmployees": 500
+}
