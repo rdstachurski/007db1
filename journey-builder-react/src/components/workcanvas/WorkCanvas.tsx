@@ -20,6 +20,7 @@ import { AppNode, FormNode } from "../nodes/types";
 import { createPrerequisites } from "../../utils/createPrerequisiteLists";
 import { GlobalProperties } from "../../types/prefillOptions/dataSource";
 import { callApi } from "../../utils/callApi";
+import { API_ENDPOINTS } from "../../config/apiConfig";
 export default function WorkCanvas() {
 	const [nodes, setNodes] = useNodesState<AppNode>([]);
 	const [edges, setEdges] = useEdgesState<Edge>([]);
@@ -41,7 +42,7 @@ export default function WorkCanvas() {
 		const fetchData = async () => {
 			try {
 				const data = await callApi<null, BluePrintDesc>(
-					"http://localhost:3000/api/v1/demo/actions/blueprints/testBlueprint/graph",
+					API_ENDPOINTS.blueprintGraph("testBlueprint"),
 					"GET"
 				);
 				setNodes(data.nodes);
@@ -90,7 +91,6 @@ export default function WorkCanvas() {
 			const filteredPrereqNodesData = nodes
 				.filter((node) => selectedNodePrereqs.includes(node.id))
 				.map((node) => node.data);
-			console.log(filteredPrereqNodesData);
 			setPrereqNodeData(filteredPrereqNodesData);
 		}
 	};
@@ -99,7 +99,6 @@ export default function WorkCanvas() {
 		formValues: Record<string, Record<string, unknown>>
 	) => {
 		e.preventDefault();
-		console.log("Form Submitted:", formValues);
 		if (!selectedNode) return;
 
 		setNodes((prevNodes) =>
