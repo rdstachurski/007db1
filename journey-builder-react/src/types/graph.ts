@@ -1,5 +1,6 @@
-import { Connection, Node } from "@xyflow/react";
+import { Connection } from "@xyflow/react";
 import { Form } from "./form";
+import { AppNode } from "../components/nodes/types";
 
 export interface BluePrintDesc {
 	$schema: string;
@@ -8,7 +9,7 @@ export interface BluePrintDesc {
 	name: string;
 	description: string;
 	category: string;
-	nodes: Node[];
+	nodes: AppNode[];
 	edges: Connection[];
 	forms: Form[];
 	branches: unknown[];
