@@ -1,33 +1,38 @@
 import { AppNode } from "../components/nodes/types";
 
-export const createPrerequisites = (nodes: AppNode[]) => {
-	const prerequisiteMap = new Map<string, string[]>();
+const collectAncestors = (
+	nodeId: string,
+	nodes: AppNode[],
+	visited: Record<string, Set<string>>
+): Set<string> => {
+	if (visited[nodeId]) {
+		return visited[nodeId];
+	}
 
-	//dfs
-	const find = (nodeId: string, visited = new Set<string>()): string[] => {
-		if (prerequisiteMap.has(nodeId)) return prerequisiteMap.get(nodeId) ?? [];
+	const prerequisiteSet = new Set<string>();
 
-		const prerequisiteArray: string[] = [];
-		const node = nodes.find((n) => n.id === nodeId);
-
-		if (node && node.type === "form" && node.data.prerequisites?.length) {
-			for (const prereq of node.data.prerequisites) {
-				if (!visited.has(prereq)) {
-					visited.add(prereq);
-					prerequisiteArray.push(prereq);
-					prerequisiteArray.push(...find(prereq, visited));
-				}
+	const targetNode = nodes.find((node) => node.id === nodeId);
+	if (targetNode && targetNode.type === "form") {
+		const prereq = targetNode.data.prerequisites;
+		for (const p of prereq || []) {
+			prerequisiteSet.add(p);
+			const parentAncestor = collectAncestors(p, nodes, visited);
+			for (const parent of parentAncestor) {
+				prerequisiteSet.add(parent);
 			}
 		}
-		prerequisiteMap.set(nodeId, prerequisiteArray);
-		return prerequisiteArray;
-	};
+		visited[nodeId] = prerequisiteSet;
+		return prerequisiteSet;
+	}
+	return new Set<string>();
+};
 
-	nodes.forEach((node) => {
-		if (prerequisiteMap.has(node.id)) {
-			find(node.id);
-		}
-	});
-
-	return prerequisiteMap;
+export const createPrerequisites = (nodes: AppNode[]) => {
+	const visited: Record<string, Set<string>> = {};
+	const results: Record<string, string[]> = {};
+	for (const n of nodes) {
+		const ancestorsSet = collectAncestors(n.id, nodes, visited);
+		results[n.id] = Array.from(ancestorsSet);
+	}
+	return results;
 };

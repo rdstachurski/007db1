@@ -6,16 +6,26 @@ interface PrefillOptionsProp {
 	onCancel: () => void;
 	globalProps: GlobalProperties[];
 	prereqNodeData: Record<string, unknown>[] | undefined;
+	onSelectPrefill: (prefillSource: string) => void;
 }
 export default function PrefillOptions({
 	onCancel,
 	globalProps,
 	prereqNodeData,
+	onSelectPrefill,
 }: PrefillOptionsProp) {
 	const [selectedPrefillKey, setSelectedPrefillKey] = useState<string | null>(
 		null
 	);
-	const renderPrefillFields = (input_mapping?: unknown) => {
+
+	const [prefillSource, setPrefillSource] = useState("");
+	const handleOnSelect = () => {
+		onSelectPrefill(prefillSource);
+	};
+	const renderPrefillFields = (
+		dataSourceName: string,
+		input_mapping?: unknown
+	) => {
 		if (input_mapping && typeof input_mapping === "object") {
 			const inputMapping = input_mapping as Record<
 				string,
@@ -28,7 +38,10 @@ export default function PrefillOptions({
 						<li key={key}>
 							<button
 								type="button"
-								onClick={() => setSelectedPrefillKey(key)}
+								onClick={() => {
+									setSelectedPrefillKey(key);
+									setPrefillSource(dataSourceName);
+								}}
 								className={`block w-full text-left rounded-lg px-4 py-2 text-sm font-medium cursor-pointer
       ${
 				selectedPrefillKey === key
@@ -103,14 +116,17 @@ export default function PrefillOptions({
 										</span>
 									</summary>
 
-									{renderPrefillFields(data.input_mapping)}
+									{renderPrefillFields(String(data.name), data.input_mapping)}
 								</details>
 							</li>
 						))}
 				</ul>
 			</div>
 			<div className="flex gap-2 p-2 border-t border-gray-200">
-				<button className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+				<button
+					onClick={handleOnSelect}
+					className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+				>
 					Select
 				</button>
 				<button

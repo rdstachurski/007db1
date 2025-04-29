@@ -7,7 +7,7 @@ export type FormNodeData = {
 	name: string;
 	prerequisites: string[] | null;
 	permitted_roles: string[] | null;
-	input_mapping: Record<string, unknown>;
+	input_mapping: Record<string, Record<string, unknown>>;
 	sla_duration: {
 		number: number;
 		unit: string;
