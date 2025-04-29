@@ -14,6 +14,7 @@ import apiCallData from "../../dummydata/graph.json";
 import { BluePrintDesc } from "../../types/graph";
 import { nodeTypes } from "../nodes";
 import { useEffect, useState } from "react";
+import FormModal from "../modal/formModal";
 
 export default function WorkCanvas() {
 	const [nodes, setNodes] = useNodesState<Node>([]);
@@ -33,10 +34,18 @@ export default function WorkCanvas() {
 		setEdges(createEdges(castedData.edges));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+	const [showModal, setShowModal] = useState(false);
 
 	return (
 		<div className=" w-screen h-screen border border-black">
-			<ReactFlow fitView nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
+			{showModal && <FormModal onCloseModal={() => setShowModal(false)} />}
+			<ReactFlow
+				fitView
+				nodes={nodes}
+				edges={edges}
+				nodeTypes={nodeTypes}
+				onNodeClick={() => setShowModal(true)}
+			>
 				<Controls />
 				<Background size={2} />
 			</ReactFlow>
