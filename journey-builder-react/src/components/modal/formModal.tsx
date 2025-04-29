@@ -5,6 +5,7 @@ import { GlobalProperties } from "../../types/prefillOptions/dataSource";
 import ToggleBtn from "../buttons/ToggleBtn";
 import { UnPrefilledRow } from "../fieldrows/UnPrefilledRow";
 import InputRow from "../fieldrows/InputRow";
+import { PrefilledRow } from "../fieldrows/PrefilledRow";
 
 interface FormModalProps {
 	onCloseModal: () => void;
@@ -66,7 +67,7 @@ export default function FormModal({
 				...prev,
 				[selectedKey]: {
 					prefilled: togglePrefill,
-					[selectedKey]: prefillSource + "." + selectedKey,
+					value: prefillSource + "." + selectedKey,
 				},
 			}));
 		}
@@ -75,11 +76,28 @@ export default function FormModal({
 		setSelectedKey(null);
 	};
 
+	const handleRemovePrefill = (key: string) => {
+		setFormValues((prev) => {
+			const updated = { ...prev };
+			delete updated[key];
+			return updated;
+		});
+	};
+
 	const renderRowType = (key: string) => {
 		const value = (formValues[key]?.value as string) ?? "";
 		const type = selectedForm.field_schema.properties[key].type;
 
 		if (togglePrefill) {
+			if (formValues[key]?.prefilled) {
+				return (
+					<PrefilledRow
+						keyName={key}
+						value={value}
+						onRemovePrefilled={() => handleRemovePrefill(key)}
+					/>
+				);
+			}
 			return (
 				<UnPrefilledRow
 					keyName={key}
