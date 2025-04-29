@@ -109,9 +109,9 @@ export default function WorkCanvas() {
 						...node,
 						data: {
 							...node.data,
-							input_mapping: formValues, // ✅ safely add to existing FormNodeData
+							input_mapping: formValues,
 						},
-					} as FormNode; // cast only if you know it's a FormNode
+					} as FormNode;
 				}
 				return node;
 			})

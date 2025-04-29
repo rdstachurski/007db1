@@ -83,7 +83,10 @@ export default function PrefillOptionsList({
 										<li key={key}>
 											<button
 												type="button"
-												onClick={() => setSelectedPrefillKey(key)}
+												onClick={() => {
+													setSelectedPrefillKey(key);
+													setPrefillSource(data.name);
+												}}
 												className={`block w-full text-left rounded-lg px-4 py-2 text-sm font-medium cursor-pointer
       ${
 				selectedPrefillKey === key
