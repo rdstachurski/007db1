@@ -46,19 +46,21 @@ The coding challenge provided a [repo](https://github.com/mosaic-avantos/fronten
 ## Usage
 
 The DAG will be fully displayed when the page is first loaded in like this:
-
+![initial](assests/initial_page_load.png)
 When a node is clicked, a modal will pop-up with form fields associated with the node.
-
 The toggle button gives the user the option to use prefilled values from global values or values from direct and transitive prequisitive nodes. 
 
-*Toggled off
-
-*Toggled on
+* Toggled off
+  
+![toggled off](assests/user_input_field.png)
+* Toggled on
+  
+![toggled on](assests/prefill_on_field_selected.png)
 
 When the prefill toggle is on and the user clicks on a field, the prefill option sidemenu will appear with available values from different sources. After selecting a prefilled value, the field will be populated with the source of the value and what field the value is from.
 
 Clicking on the x on the right hand of the field will unpopulate that field. 
-
+![toggled on](assests/prefilled_fields.png)
 <!-- CONTACT -->
 ## Contact
 
