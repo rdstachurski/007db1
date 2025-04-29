@@ -9,7 +9,6 @@ import {
 	useNodesState,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import apiCallData from "../../dummydata/graph.json";
 import { BluePrintDesc } from "../../types/graph";
 import { nodeTypes } from "../nodes";
 import { useEffect, useState } from "react";
@@ -20,7 +19,7 @@ import { Form } from "../../types/form";
 import { AppNode, FormNode } from "../nodes/types";
 import { createPrerequisites } from "../../utils/createPrerequisiteLists";
 import { GlobalProperties } from "../../types/prefillOptions/dataSource";
-
+import { callApi } from "../../utils/callApi";
 export default function WorkCanvas() {
 	const [nodes, setNodes] = useNodesState<AppNode>([]);
 	const [edges, setEdges] = useEdgesState<Edge>([]);
@@ -38,23 +37,32 @@ export default function WorkCanvas() {
 		return processedEdges;
 	};
 
-	//Mimic getting Api Response
 	useEffect(() => {
-		const castedData = apiCallData as unknown as BluePrintDesc;
-		setNodes(castedData.nodes);
-		setEdges(createEdges(castedData.edges));
-		setForms(castedData.forms);
-		const prereqs = createPrerequisites(castedData.nodes);
-		setPrerequisites(prereqs);
-		const global: GlobalProperties[] = [
-			{ name: "Action Properties", properties: actionProp },
-			{
-				name: "Client Organization Properties",
-				properties: clientOrgProp,
-			},
-		];
-		setGlobalProps(global);
+		const fetchData = async () => {
+			try {
+				const data = await callApi<null, BluePrintDesc>(
+					"http://localhost:3000/api/v1/demo/actions/blueprints/testBlueprint/graph",
+					"GET"
+				);
+				setNodes(data.nodes);
+				setEdges(createEdges(data.edges));
+				setForms(data.forms);
 
+				const prereqs = createPrerequisites(data.nodes);
+				setPrerequisites(prereqs);
+				const global: GlobalProperties[] = [
+					{ name: "Action Properties", properties: actionProp },
+					{
+						name: "Client Organization Properties",
+						properties: clientOrgProp,
+					},
+				];
+				setGlobalProps(global);
+			} catch (err) {
+				console.error(err);
+			}
+		};
+		fetchData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	const [showModal, setShowModal] = useState(false);

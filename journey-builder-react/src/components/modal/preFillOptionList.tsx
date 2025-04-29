@@ -2,18 +2,18 @@ import { useState } from "react";
 import { GlobalProperties } from "../../types/prefillOptions/dataSource";
 import { ChevronDown } from "lucide-react";
 
-interface PrefillOptionsProp {
+interface PrefillOptionsListProp {
 	onCancel: () => void;
 	globalProps: GlobalProperties[];
 	prereqNodeData: Record<string, unknown>[] | undefined;
 	onSelectPrefill: (prefillSource: string) => void;
 }
-export default function PrefillOptions({
+export default function PrefillOptionsList({
 	onCancel,
 	globalProps,
 	prereqNodeData,
 	onSelectPrefill,
-}: PrefillOptionsProp) {
+}: PrefillOptionsListProp) {
 	const [selectedPrefillKey, setSelectedPrefillKey] = useState<string | null>(
 		null
 	);
