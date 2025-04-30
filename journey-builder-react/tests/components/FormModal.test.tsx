@@ -140,12 +140,12 @@ vi.mock("../../src/components/modal/preFillOptionList.tsx", () => ({
 		onSelectPrefill,
 	}: {
 		onCancel: () => void;
-		onSelectPrefill: (source: string) => void;
+		onSelectPrefill: (source: string, sourcePreKey: string) => void;
 	}) => (
 		<div data-testid="mock-prefill-options-list">
 			<button
 				data-testid="mock-select"
-				onClick={() => onSelectPrefill("mockSource")}
+				onClick={() => onSelectPrefill("mockSource", "mockKey")}
 			>
 				Select Prefill
 			</button>
@@ -234,7 +234,7 @@ describe("FormModal Component", () => {
 		expect(sideMenu).not.toBeInTheDocument();
 	});
 
-	it("should call handleObFormSubmit with new prefilled value", async () => {
+	it("should call handleOnFormSubmit with new prefilled value", async () => {
 		render(
 			<FormModal
 				onCloseModal={onCloseModalMock}
@@ -252,7 +252,7 @@ describe("FormModal Component", () => {
 		await user.click(screen.getByTestId("mock-select"));
 		await user.click(screen.getByRole("button", { name: "Save" }));
 		expect(handleOnFormSubmitMock).toHaveBeenCalledWith(expect.anything(), {
-			button: { prefilled: true, value: "mockSource.button" },
+			button: { prefilled: true, value: "mockSource.mockKey" },
 		});
 	});
 

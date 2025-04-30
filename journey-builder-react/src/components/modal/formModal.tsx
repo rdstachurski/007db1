@@ -61,13 +61,16 @@ export default function FormModal({
 		setShowPrefillOptions(true);
 	};
 
-	const handleSavePrefill = (prefillSource: string) => {
+	const handleSavePrefill = (
+		prefillSource: string,
+		selectedPrefillKey: string
+	) => {
 		if (selectedKey) {
 			setFormValues((prev) => ({
 				...prev,
 				[selectedKey]: {
 					prefilled: togglePrefill,
-					value: prefillSource + "." + selectedKey,
+					value: prefillSource + "." + selectedPrefillKey,
 				},
 			}));
 		}

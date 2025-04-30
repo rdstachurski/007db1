@@ -6,7 +6,10 @@ import PrefillOptionsList from "../../src/components/modal/PreFillOptionList";
 import "@testing-library/jest-dom/vitest";
 
 const globalPropsMock = [
-	{ name: "GlobalSource", properties: { fieldA: {}, fieldB: {} } },
+	{
+		name: "GlobalSource",
+		properties: { region: "North America", statusbar: "active" },
+	},
 ];
 
 const prereqNodeDataMock = [
@@ -51,10 +54,10 @@ describe("PrefillOptionsList Component", () => {
 		fireEvent.click(screen.getByText("GlobalSource"));
 
 		const user = userEvent.setup();
-		await user.click(screen.getByRole("button", { name: "fieldA" }));
+		await user.click(screen.getByRole("button", { name: "region" }));
 		await user.click(screen.getByRole("button", { name: "Select" }));
 
-		expect(onSelectPrefillMock).toHaveBeenCalledWith("GlobalSource");
+		expect(onSelectPrefillMock).toHaveBeenCalledWith("GlobalSource", "region");
 	});
 
 	it("should select a prerequisite prefill key and calls onSelectPrefill with correct source", async () => {
@@ -73,7 +76,7 @@ describe("PrefillOptionsList Component", () => {
 		await user.click(screen.getByRole("button", { name: "preA" }));
 		await user.click(screen.getByRole("button", { name: "Select" }));
 
-		expect(onSelectPrefillMock).toHaveBeenCalledWith("PrereqSource");
+		expect(onSelectPrefillMock).toHaveBeenCalledWith("PrereqSource", "preA");
 	});
 
 	it("should call onCancel when Cancel button is clicked", () => {

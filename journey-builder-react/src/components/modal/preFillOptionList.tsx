@@ -6,7 +6,7 @@ interface PrefillOptionsListProp {
 	onCancel: () => void;
 	globalProps: GlobalProperties[];
 	prereqNodeData: Record<string, unknown>[] | undefined;
-	onSelectPrefill: (prefillSource: string) => void;
+	onSelectPrefill: (prefillSource: string, selectedPrefillKey: string) => void;
 }
 export default function PrefillOptionsList({
 	onCancel,
@@ -20,7 +20,9 @@ export default function PrefillOptionsList({
 
 	const [prefillSource, setPrefillSource] = useState("");
 	const handleOnSelect = () => {
-		onSelectPrefill(prefillSource);
+		if (selectedPrefillKey) {
+			onSelectPrefill(prefillSource, selectedPrefillKey);
+		}
 	};
 	const renderPrefillFields = (
 		dataSourceName: string,
