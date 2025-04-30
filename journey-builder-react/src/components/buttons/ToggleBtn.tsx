@@ -11,7 +11,6 @@ const ToggleBtn = ({ onClick }: ToggleBtnProps) => {
 	};
 
 	const handleClick = () => {
-		console.log("Toggle clicked!");
 		onClick();
 	};
 

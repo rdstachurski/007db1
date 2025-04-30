@@ -12,7 +12,7 @@ export interface FieldSchema {
 	required: string[] | null;
 	properties: Record<string, FieldProperties>;
 }
-interface FieldProperties {
+export interface FieldProperties {
 	avantos_type: string;
 	title?: string;
 	type: string;
@@ -22,11 +22,11 @@ interface FieldProperties {
 	format?: string;
 }
 
-interface PropItems {
+export interface PropItems {
 	enum: string[];
 	type: string;
 }
-interface UISchemaElement {
+export interface UISchemaElement {
 	type: string;
 	scope: string;
 	label?: string;

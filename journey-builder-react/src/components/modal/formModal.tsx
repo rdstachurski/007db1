@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form } from "../../types/form";
-import PrefillOptions from "./preFillOptionList";
+import PrefillOptions from "./PreFillOptionList";
 import { GlobalProperties } from "../../types/prefillOptions/dataSource";
 import ToggleBtn from "../buttons/ToggleBtn";
 import { UnPrefilledRow } from "../fieldrows/UnPrefilledRow";
@@ -86,6 +86,7 @@ export default function FormModal({
 
 	const renderRowType = (key: string) => {
 		const value = (formValues[key]?.value as string) ?? "";
+
 		const type = selectedForm.field_schema.properties[key].type;
 
 		if (togglePrefill) {

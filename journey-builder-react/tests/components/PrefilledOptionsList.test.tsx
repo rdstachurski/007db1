@@ -2,28 +2,29 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import PrefillOptionsList from "../../src/components/modal/preFillOptionList";
+import PrefillOptionsList from "../../src/components/modal/PreFillOptionList";
+import "@testing-library/jest-dom/vitest";
+
+const globalPropsMock = [
+	{ name: "GlobalSource", properties: { fieldA: {}, fieldB: {} } },
+];
+
+const prereqNodeDataMock = [
+	{
+		name: "PrereqSource",
+		input_mapping: { preA: { foo: "bar" }, preB: { baz: 123 } },
+	},
+];
+
+const onCancelMock = vi.fn();
+const onSelectPrefillMock = vi.fn();
 
 describe("PrefillOptionsList Component", () => {
-	const globalPropsMock = [
-		{ name: "GlobalSource", properties: { fieldA: {}, fieldB: {} } },
-	];
-
-	const prereqNodeDataMock = [
-		{
-			name: "PrereqSource",
-			input_mapping: { preA: { foo: "bar" }, preB: { baz: 123 } },
-		},
-	];
-
-	const onCancelMock = vi.fn();
-	const onSelectPrefillMock = vi.fn();
-
 	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
-	it("renders globalProps and prereqNodeData lists", () => {
+	it("should render globalProps and prereqNodeData lists", () => {
 		render(
 			<PrefillOptionsList
 				onCancel={onCancelMock}
@@ -33,11 +34,11 @@ describe("PrefillOptionsList Component", () => {
 			/>
 		);
 
-		expect(screen.getByText("GlobalSource")).toBeInTheDocument();
-		expect(screen.getByText("PrereqSource")).toBeInTheDocument();
+		expect(screen.getByText(globalPropsMock[0].name)).toBeInTheDocument();
+		expect(screen.getByText(prereqNodeDataMock[0].name)).toBeInTheDocument();
 	});
 
-	it("selects a global prefill key and calls onSelectPrefill with correct source", async () => {
+	it("should select a global prefill key and calls onSelectPrefill with correct source", async () => {
 		render(
 			<PrefillOptionsList
 				onCancel={onCancelMock}
@@ -47,7 +48,6 @@ describe("PrefillOptionsList Component", () => {
 			/>
 		);
 
-		// Expand global section
 		fireEvent.click(screen.getByText("GlobalSource"));
 
 		const user = userEvent.setup();
@@ -57,7 +57,7 @@ describe("PrefillOptionsList Component", () => {
 		expect(onSelectPrefillMock).toHaveBeenCalledWith("GlobalSource");
 	});
 
-	it("selects a prerequisite prefill key and calls onSelectPrefill with correct source", async () => {
+	it("should select a prerequisite prefill key and calls onSelectPrefill with correct source", async () => {
 		render(
 			<PrefillOptionsList
 				onCancel={onCancelMock}
@@ -67,7 +67,6 @@ describe("PrefillOptionsList Component", () => {
 			/>
 		);
 
-		// Expand prerequisites section
 		fireEvent.click(screen.getByText("PrereqSource"));
 
 		const user = userEvent.setup();
@@ -77,7 +76,7 @@ describe("PrefillOptionsList Component", () => {
 		expect(onSelectPrefillMock).toHaveBeenCalledWith("PrereqSource");
 	});
 
-	it("calls onCancel when Cancel button is clicked", () => {
+	it("should call onCancel when Cancel button is clicked", () => {
 		render(
 			<PrefillOptionsList
 				onCancel={onCancelMock}
@@ -91,7 +90,7 @@ describe("PrefillOptionsList Component", () => {
 		expect(onCancelMock).toHaveBeenCalled();
 	});
 
-	it("does not crash when prereqNodeData is undefined", () => {
+	it("should not crash when prereqNodeData is undefined", () => {
 		render(
 			<PrefillOptionsList
 				onCancel={onCancelMock}
@@ -101,7 +100,7 @@ describe("PrefillOptionsList Component", () => {
 			/>
 		);
 
-		expect(screen.getByText("GlobalSource")).toBeInTheDocument();
+		expect(screen.getByText(globalPropsMock[0].name)).toBeInTheDocument();
 		expect(screen.queryByText("PrereqSource")).not.toBeInTheDocument();
 	});
 });

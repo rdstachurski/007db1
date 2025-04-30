@@ -12,7 +12,7 @@ import "@xyflow/react/dist/style.css";
 import { BluePrintDesc } from "../../types/graph";
 import { nodeTypes } from "../nodes";
 import { useEffect, useState } from "react";
-import FormModal from "../modal/formModal";
+import FormModal from "../modal/FormModal";
 import actionProp from "../../dummydata/actionProperties.json";
 import clientOrgProp from "../../dummydata/clientOrgProperties.json";
 import { Form } from "../../types/form";
@@ -86,6 +86,7 @@ export default function WorkCanvas() {
 			setInitialInputMapping(node.data.input_mapping);
 			const form = forms.find((form) => form.id === node.data.component_id);
 			setSelectedForm(form);
+
 			const selectedNodePrereqs = prerequisites ? prerequisites[node.id] : [];
 
 			const filteredPrereqNodesData = nodes
